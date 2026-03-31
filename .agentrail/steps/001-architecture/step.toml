@@ -1,0 +1,17 @@
+[step]
+name = "001-architecture"
+status = "pending"
+prompt = """
+Design the cas24 architecture and set up build/test infrastructure.
+
+1. Create src/cas24.c with main(), UART I/O helpers, and memory layout constants.
+2. Create scripts/build.sh that compiles with tc24r and assembles with as24.
+3. Create scripts/test.sh that runs cas24 on a trivial .s input and compares
+   output bytes against the cross-assembler (as24).
+4. Define static allocation strategy: code buffer, symbol table arrays,
+   forward ref arrays, input line buffer, token buffer. Document size limits.
+5. Implement hand-rolled string helpers: str_eq, str_len, str_copy.
+6. Verify the skeleton compiles and runs (prints a banner via UART).
+
+Reference: ~/github/sw-embed/sw-cor24-x-assembler/src/assembler.rs
+"""

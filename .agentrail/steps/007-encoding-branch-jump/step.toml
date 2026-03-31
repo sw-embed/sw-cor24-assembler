@@ -1,0 +1,19 @@
+[step]
+name = "007-encoding-branch-jump"
+status = "pending"
+prompt = """
+Implement branch and jump instruction encoding.
+
+1. Encode bra (2 bytes, signed 8-bit PC-relative offset).
+2. Encode brt, brf (2 bytes, signed 8-bit PC-relative offset).
+3. Encode jmp register-indirect (1 byte).
+4. Encode jal (2 bytes, register pair).
+5. Encode la (4 bytes, register + 24-bit absolute address).
+6. Encode lc, lcu (2 bytes, register + 8-bit immediate).
+7. Handle branch offset calculation: offset = target - (instr_addr + 4).
+8. For now, only handle backward branches (labels already seen).
+   Forward branches will use the forward-ref mechanism in step 010.
+9. Test against cross-assembler output.
+
+Reference: Rust assembler's branch/jump encoding.
+"""

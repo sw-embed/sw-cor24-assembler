@@ -1,0 +1,35 @@
+[saga]
+name = "native-assembler"
+description = """
+Build a native COR24 assembler in C that runs on COR24 FPGA hardware.
+Two-pass assembler matching the Rust cross-assembler's capabilities.
+Compiled by tc24r, tested against the cross-assembler's output.
+"""
+status = "active"
+current_step = 1
+
+[plan]
+text = """
+# Native COR24 Assembler (cas24)
+
+Port the Rust cross-assembler (~1,500 LOC) to C within tc24r's supported
+subset. The assembler must produce byte-identical output to the cross-assembler
+for all existing .s test files.
+
+## Constraints
+- No structs (parallel arrays)
+- No malloc (static allocation with fixed limits)
+- No string library (hand-rolled)
+- Single translation unit
+- 24-bit int, 8-bit char
+
+## Phases
+1. Architecture + scaffolding (build/test infrastructure)
+2. Lexer + mnemonic table + register parser
+3. Instruction encoding (all 49 mnemonics)
+4. Two-pass assembly (symbol table, forward refs)
+5. Directives (.org, .byte, .word, .comm)
+6. Error reporting
+7. Byte-for-byte validation against cross-assembler
+8. Documentation and release
+"""

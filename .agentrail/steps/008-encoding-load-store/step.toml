@@ -1,0 +1,16 @@
+[step]
+name = "008-encoding-load-store"
+status = "pending"
+prompt = """
+Implement load/store instruction encoding.
+
+1. Encode lb, lbu (2 bytes, offset(base) addressing).
+2. Encode lw (2 bytes, offset(base) addressing).
+3. Encode sb (2 bytes, offset(base) addressing).
+4. Encode sw (2 bytes, offset(base) addressing).
+5. Parse the offset(base) operand format.
+6. Handle signed 8-bit offset encoding.
+7. Test against cross-assembler output.
+
+Reference: Rust assembler's load/store encoding.
+"""
