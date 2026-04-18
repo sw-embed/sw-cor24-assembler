@@ -108,29 +108,75 @@ fetch_em24() {
         fi
     fi
 
-    upstream="$(resolve_local_repo "$manifest")"
-    if [ -z "$upstream" ]; then
-        echo "error: sw-em24: upstream sibling not found at $expected_path" >&2
-        echo "       (manifest: $manifest)" >&2
-        echo "hint: clone https://github.com/sw-embed/sw-cor24-emulator.git" >&2
-        echo "      into $REPO_ROOT/$expected_path and run 'cargo build --release' there" >&2
+    # Three resolution strategies, in order of preference:
+    #   1. $SW_EM24_BIN -- explicit path set in active.env or the
+    #      shell environment. Highest priority: a dev can always
+    #      override by pointing at a known-good binary.
+    #   2. Upstream sibling + cargo target/release (the canonical
+    #      build-from-source flow this manifest describes).
+    #   3. System-installed cor24-run on PATH (last-resort fallback
+    #      on dev systems that don't follow the sibling-repos
+    #      layout).
+    # Pick the first that yields an existing file; copy it into
+    # the vendored bin/.
+
+    local cor24_src=""
+
+    if [ -n "${SW_EM24_BIN:-}" ]; then
+        if [ -f "$SW_EM24_BIN" ]; then
+            cor24_src="$SW_EM24_BIN"
+            echo "  source: SW_EM24_BIN override ($cor24_src)"
+        else
+            echo "error: SW_EM24_BIN is set but $SW_EM24_BIN is not a file" >&2
+            return 1
+        fi
+    fi
+
+    if [ -z "$cor24_src" ]; then
+        upstream="$(resolve_local_repo "$manifest")"
+        if [ -n "$upstream" ]; then
+            local commit bin_rel build_cmd build_cwd
+            commit="$(manifest_get "$manifest" .commit)"
+            bin_rel="$(manifest_get "$manifest" .binary_src)"
+            build_cmd="$(manifest_get "$manifest" .build_cmd)"
+            build_cwd="$(manifest_get "$manifest" '.build_cwd // "."')"
+            echo "  upstream: $upstream (commit $commit)"
+            local candidate="$upstream/$bin_rel"
+            if [ -f "$candidate" ]; then
+                cor24_src="$candidate"
+            else
+                echo "  warning: $candidate not built" >&2
+                echo "           run '$build_cmd' in $upstream/$build_cwd" >&2
+            fi
+        fi
+    fi
+
+    if [ -z "$cor24_src" ]; then
+        local sys_bin
+        sys_bin="$(command -v cor24-run 2>/dev/null || true)"
+        if [ -n "$sys_bin" ]; then
+            cor24_src="$sys_bin"
+            echo "  source: system PATH ($cor24_src)"
+        fi
+    fi
+
+    if [ -z "$cor24_src" ]; then
+        echo "error: sw-em24: no cor24-run binary could be resolved" >&2
+        echo "  tried (in order):" >&2
+        echo "    1. \$SW_EM24_BIN override     -- unset" >&2
+        echo "    2. $expected_path/target/release/cor24-run" >&2
+        echo "                                  -- sibling not populated or not built" >&2
+        echo "    3. cor24-run on system PATH   -- not found" >&2
+        echo "  to fix, pick one:" >&2
+        echo "    - export SW_EM24_BIN=/path/to/cor24-run  (or set it in vendor/active.env)" >&2
+        echo "    - git clone https://github.com/sw-embed/sw-cor24-emulator.git $REPO_ROOT/$expected_path" >&2
+        echo "      && (cd $REPO_ROOT/$expected_path && cargo build --release)" >&2
         return 1
     fi
 
-    local commit
-    commit="$(manifest_get "$manifest" .commit)"
-    echo "  upstream: $upstream (commit $commit)"
-
-    local cor24_src="$upstream/target/release/cor24-run"
-    if [ -f "$cor24_src" ]; then
-        cp "$cor24_src" "$dest/bin/cor24-run"
-        chmod +x "$dest/bin/cor24-run"
-        echo "  copied: cor24-run"
-    else
-        echo "  warning: $cor24_src not found" >&2
-        echo "           run 'cargo build --release' in $upstream" >&2
-        return 1
-    fi
+    cp "$cor24_src" "$dest/bin/cor24-run"
+    chmod +x "$dest/bin/cor24-run"
+    echo "  copied: cor24-run"
 }
 
 # --- Main -------------------------------------------------------------------

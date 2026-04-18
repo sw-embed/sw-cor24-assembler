@@ -2,12 +2,13 @@
   "name": "sw-em24",
   "version": "v0.1.0",
   "description": "COR24 emulator (cor24-run) with built-in assembler. Serves as the vendored cross-assembler for sw-as24 during bootstrap, until the self-hosted assembler can assemble its own source.",
-  "repo": "https://github.com/sw-embed/sw-cor24-emulator.git",
-  "repo_path_local": "../sw-cor24-emulator",
-  "commit": "TBD",
+  "repo": "https://github.com/sw-embed/cor24-rs.git",
+  "repo_path_local": "../cor24-rs",
+  "commit": "40033d90e80dcef1a420bd3db7c8fd22fb9f181f",
   "tag": "TBD",
-  "build_cmd": "cargo build --release",
-  "binary_src": "target/release/cor24-run",
+  "build_cmd": "cargo build --release --bin cor24-run",
+  "build_cwd": "rust-to-cor24",
+  "binary_src": "rust-to-cor24/target/release/cor24-run",
   "headers_src": null,
   "docs_src": "docs",
   "platforms": {
@@ -16,7 +17,7 @@
       "size": 0
     }
   },
-  "recorded_at": "TBD",
-  "recorded_by": "TBD",
-  "notes": "Upstream sibling sw-cor24-emulator was not present in this worktree (dcasm) at the time this manifest was landed, so the commit SHA is pinned as TBD. Step 004 (vendor-fetch-script) resolves the sibling path and surfaces a clear error when it is missing; once a populated sibling exists, bump this file's commit / sha256 / recorded_at fields and re-run `just vendor-fetch`."
+  "recorded_at": "2026-04-18",
+  "recorded_by": "relaunch-saga",
+  "notes": "cor24-rs is the stabilized upstream (GitHub sw-embed/cor24-rs). It is the parent of sw-cor24-emulator (the sw-embed fork intended for future changes); while the fork has no tracked divergence, we vendor from cor24-rs. The cor24-run binary lives in the `wasm2cor24` package under rust-to-cor24/, which is outside the workspace members, so `cargo build --release --bin cor24-run` must be run from that subdir (see build_cwd). Binary path is relative to repo root (binary_src). Bump commit + platforms.sha256 when re-vendoring."
 }
