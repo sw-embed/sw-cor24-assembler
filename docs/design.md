@@ -1,4 +1,4 @@
-# Design — Relaunch saga
+# Design -- Relaunch saga
 
 **Status:** Draft (Relaunch saga)
 **Scope:** The scaffolding and first smoke test that prove the
@@ -16,31 +16,31 @@ toolchain end-to-end on the single mnemonic `nop`.
 
 ```
 sw-cor24-assembler/
-├── README.md                  # revamped, describes the .s-based scope
-├── justfile                   # recipe runner
-├── .gitignore                 # build/, vendor bin/
-├── CLAUDE.md                  # updated session protocol + project rules
-├── docs/
-│   ├── prd.md
-│   ├── architecture.md
-│   ├── design.md              # this file
-│   └── plan.md
-├── src/
-│   └── sw-as24.s              # the self-hosted assembler (starts tiny)
-├── tests/
-│   └── smoke/
-│       └── nop.s              # single "nop"; expected byte 0x00
-├── scripts/
-│   ├── vendor-fetch.sh        # port of the sw-cor24-ocaml script
-│   ├── build.sh               # assemble src/sw-as24.s with vendored cor24-run
-│   └── test.sh                # assemble nop.s with both tools, diff bytes
-└── vendor/
-    ├── .gitignore             # ignores */v*/bin/*, keeps .gitkeep
-    ├── active.env             # single-source-of-truth version pins
-    └── sw-em24/<version>/
-        ├── version.json       # manifest (repo, commit, artifact paths)
-        └── bin/
-            └── .gitkeep       # placeholder; cor24-run lands here on fetch
++-- README.md                  # revamped, describes the .s-based scope
++-- justfile                   # recipe runner
++-- .gitignore                 # build/, vendor bin/
++-- CLAUDE.md                  # updated session protocol + project rules
++-- docs/
+|   +-- prd.md
+|   +-- architecture.md
+|   +-- design.md              # this file
+|   +-- plan.md
++-- src/
+|   +-- sw-as24.s              # the self-hosted assembler (starts tiny)
++-- tests/
+|   +-- smoke/
+|       +-- nop.s              # single "nop"; expected byte 0x00
++-- scripts/
+|   +-- vendor-fetch.sh        # port of the sw-cor24-ocaml script
+|   +-- build.sh               # assemble src/sw-as24.s with vendored cor24-run
+|   +-- test.sh                # assemble nop.s with both tools, diff bytes
++-- vendor/
+    +-- .gitignore             # ignores */v*/bin/*, keeps .gitkeep
+    +-- active.env             # single-source-of-truth version pins
+    +-- sw-em24/<version>/
+        +-- version.json       # manifest (repo, commit, artifact paths)
+        +-- bin/
+            +-- .gitkeep       # placeholder; cor24-run lands here on fetch
 ```
 
 The `.agentrail/` directory (new saga) and `.agentrail-archive/`
@@ -75,7 +75,7 @@ pin (`active.env`) is the only thing that needs to change.
 
 ## Justfile recipes
 
-Initial set — minimum viable for the smoke test:
+Initial set -- minimum viable for the smoke test:
 
 | Recipe          | Purpose                                                  |
 | --------------- | -------------------------------------------------------- |
@@ -88,7 +88,7 @@ Initial set — minimum viable for the smoke test:
 
 Design decisions:
 
-- No `install` target — this project builds artifacts under `build/`
+- No `install` target -- this project builds artifacts under `build/`
   and does not install anywhere.
 - `build` does not depend on `vendor-fetch`; failing fast with a
   helpful message when the vendor binary is missing is preferable
@@ -98,7 +98,7 @@ Design decisions:
 
 ## Smoke test
 
-Input — `tests/smoke/nop.s`:
+Input -- `tests/smoke/nop.s`:
 
 ```
 nop
@@ -111,7 +111,7 @@ once comment-stripping lands.
 Expected behaviour:
 
 1. `cor24-run --assemble tests/smoke/nop.s build/ref.bin build/ref.lst`
-   emits a single byte `0xFF` (the COR24 encoding of `nop` —
+   emits a single byte `0xFF` (the COR24 encoding of `nop` --
    verified empirically against the Rust assembler's listing
    output).
 2. `cor24-run --load-binary build/sw-as24.bin@0 --entry 0 -u "nop\x04" ...`
@@ -130,7 +130,7 @@ Expected behaviour:
 
 sw-as24 emits its machine-code output as ASCII hex (two printable
 chars per byte) rather than raw binary. Reason: cor24-run silently
-filters byte `0x00` out of every UART-TX observation path — the
+filters byte `0x00` out of every UART-TX observation path -- the
 per-byte log, the summary line, and even raw stdout under
 `--terminal`. Verified by probing with `lc r0, 0` vs `lc r0, 1`:
 the `0x01` byte survives to stdout, the `0x00` byte does not.
@@ -138,7 +138,7 @@ Since `nop` encodes to `0xFF` and future instructions will hit
 `0x00` too, emitting raw bytes forfeits observability.
 
 Hex encoding sidesteps the filter (all hex digits are printable
-0x30–0x46) and carries extra benefits: transport-robust over any
+0x30-0x46) and carries extra benefits: transport-robust over any
 terminal, human-debuggable, matches the classical Intel-HEX /
 S-record pattern for shipping binary over text channels. The
 design holds even if cor24-run's filter is fixed upstream later.

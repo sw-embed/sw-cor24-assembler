@@ -1,4 +1,4 @@
-# Utility — Device-side hex-to-binary loader
+# Utility -- Device-side hex-to-binary loader
 
 **Status:** Forward-looking design sketch (not in the Relaunch saga)
 **Scope:** Long-lived reference. Updated as the companion utility
@@ -7,7 +7,7 @@ becomes concrete in later sagas.
 ## Why a utility at all?
 
 `sw-as24` emits its machine-code output as printable hex ASCII on
-UART TX (two characters per byte). `docs/design.md` §"Why
+UART TX (two characters per byte). `docs/design.md` Section "Why
 hex-encoded UART output" covers the drivers: transport robustness,
 human-debuggability, and a sidestep of cor24-run's 0x00 display
 filter. That encoding choice is great for *observation* and for
@@ -15,7 +15,7 @@ filter. That encoding choice is great for *observation* and for
 executable. Something has to turn `"FF"` back into the byte
 `0xFF` before the CPU can branch to it.
 
-During development today, the something is `scripts/hex2bin.sh` —
+During development today, the something is `scripts/hex2bin.sh` --
 a host-side shell script that wraps `xxd -r -p`. That works when
 a developer is driving from a laptop with `cor24-run` and UART,
 but it assumes there *is* a host. Once COR24 hardware is
@@ -47,7 +47,7 @@ Two programs, same data, two stages:
 
 The hex-loader is also usable standalone: any program or user that
 can type or paste hex on UART can have those bytes appear in memory
-at a chosen address. That pattern — paste-to-execute — is a
+at a chosen address. That pattern -- paste-to-execute -- is a
 classical monitor feature on small systems (e.g., ROM monitors on
 1970s/80s microcomputers), so the utility earns its keep beyond
 the sw-as24 pairing.
@@ -89,7 +89,7 @@ and the Unix-ish `hexload` verb.
 - UART RX: hex-ASCII stream. Two chars per byte, any case,
   tolerant of whitespace (space, tab, CR, LF) between pairs.
 - Destination address: how to receive this is an open question;
-  options in §"Open questions".
+  options in Section "Open questions".
 
 **Output:**
 - A contiguous byte sequence starting at the destination address.
@@ -147,8 +147,8 @@ The `hex_pair_to_byte` helper is the real work: an ASCII digit
 `'0'..'9'` maps to `0..9`, `'A'..'F'`/`'a'..'f'` to `10..15`. No
 table needed; straight arithmetic + range checks.
 
-Interestingly, sw-as24 will need the *inverse* helper — byte-to-hex
-— once it emits more than the two literals in saga 1. The two
+Interestingly, sw-as24 will need the *inverse* helper -- byte-to-hex
+-- once it emits more than the two literals in saga 1. The two
 helpers are duals; they can share bit-fiddling primitives even if
 they live in different programs.
 
@@ -183,8 +183,8 @@ they live in different programs.
 delivers scaffolding + a nop-only sw-as24 with host-side `hex2bin.sh`.
 
 A plausible home for `sw-hexload` is immediately after
-`sw-cor24-monitor` gains enough surface to host utilities — see
-`docs/plan.md` §"11. Hosting-model decision" and the subsequent
+`sw-cor24-monitor` gains enough surface to host utilities -- see
+`docs/plan.md` Section "11. Hosting-model decision" and the subsequent
 sagas. The exact saga # will be pinned when the monitor work
 becomes current.
 

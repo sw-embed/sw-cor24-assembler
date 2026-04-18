@@ -1,4 +1,4 @@
-# PRD — `sw-as24`, a self-hosting COR24 assembler
+# PRD -- `sw-as24`, a self-hosting COR24 assembler
 
 **Status:** Draft (Relaunch saga)
 **Owner:** Softwarewrighter
@@ -91,8 +91,8 @@ bootstrap loop and removing the host toolchain from the runtime path.
   with a manifest + gitignored `bin/`).
 - **A3.** The runtime hosting model on COR24 (standalone UART I/O vs
   monitor-hosted via service vectors) is deliberately unresolved at
-  relaunch time; see `architecture.md` §Hosting model.
-- **A4.** ISA details — mnemonic set, encoding, register file — live
+  relaunch time; see `architecture.md` Section  Hosting model.
+- **A4.** ISA details -- mnemonic set, encoding, register file -- live
   in `sw-cor24-emulator` and `sw-cor24-x-assembler`. This project
   consumes them; it does not redefine them.
 

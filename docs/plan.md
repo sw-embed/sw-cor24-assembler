@@ -1,4 +1,4 @@
-# Plan — `sw-as24` sagas
+# Plan -- `sw-as24` sagas
 
 **Status:** Draft (Relaunch saga)
 **Scope:** Living roadmap. The current saga is detailed; later sagas
@@ -41,7 +41,7 @@ scaffolding + a single-mnemonic smoke test end-to-end.
 | 5 | justfile                  | Write `justfile` with `vendor-fetch`, `vendor-check`, `build`, `test`, `run`, `clean`. |
 | 6 | build-script              | Write `scripts/build.sh` that invokes vendored `cor24-run` on `src/sw-as24.s` and drops artifacts under `build/`. |
 | 7 | smoke-input               | Write `tests/smoke/nop.s` and `scripts/test.sh` (runs both assemblers on the input and diffs the byte output). |
-| 8 | sw-as24-skeleton          | Write `src/sw-as24.s` with UART I/O, banner, and the single-mnemonic recogniser for `nop` → `0x00`. |
+| 8 | sw-as24-skeleton          | Write `src/sw-as24.s` with UART I/O, banner, and the single-mnemonic recogniser for `nop` -> `0x00`. |
 | 9 | readme-revamp             | Rewrite `README.md` for the new scope; link to `docs/`.                 |
 |10 | claude-md-revamp          | Rewrite `CLAUDE.md` to match the `.s` scope; preserve AgentRail protocol. |
 |11 | saga-close                | Verify the whole saga end-to-end, update `docs/plan.md` to reflect completion, `agentrail complete --done`, archive saga. |
@@ -74,14 +74,14 @@ Parse `r0..r2`, `fp`, `sp`, `z`, `iv`, `ir`, and the
 `offset(base)` addressing form. Exercises the first real operand
 decoding logic.
 
-### 4. Instruction encoding — no-operand and register-only
+### 4. Instruction encoding -- no-operand and register-only
 
 Encode every mnemonic that has only register (or no) operands.
 Includes the ALU group (`add`, `sub`, `mul`, `and`, `or`, `xor`,
 `shl`, `sra`, `srl`), the comparison group (`ceq`, `cls`, `clu`),
 the extension group (`sxt`, `zxt`), and `mov` / `push` / `pop`.
 
-### 5. Instruction encoding — immediates and loads
+### 5. Instruction encoding -- immediates and loads
 
 Encode mnemonics that carry immediate operands or offset-base
 addressing: `lc`, `lcu`, `la`, `lb`, `lbu`, `lw`, `sb`, `sw`.
@@ -101,7 +101,7 @@ Record and patch forward references for branches (`rel8`) and `la`
 
 Encode `bra`, `brt`, `brf`, `jmp`, `jal` (depending on operand form
 and whether the symbol table already resolves the target from
-saga 6 / 7 — exact split pinned when this saga becomes current).
+saga 6 / 7 -- exact split pinned when this saga becomes current).
 
 ### 9. Directives
 
