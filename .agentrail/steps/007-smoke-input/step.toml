@@ -1,10 +1,11 @@
 number = 7
 slug = "smoke-input"
-status = "in-progress"
+status = "completed"
 description = """
 Create the smoke-test input and harness that close docs/design.md's
 exit crit..."""
 role = "production"
 context_files = []
 created_at = "2026-04-18T15:23:03"
-commits = []
+completed_at = "2026-04-18T15:39:30"
+commits = ["5c4f1d859fd0cd3785db97c10d4752a433fdf347"]
