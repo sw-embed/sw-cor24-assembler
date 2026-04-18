@@ -1,6 +1,7 @@
 # Plan -- `sw-as24` sagas
 
-**Status:** Draft (Relaunch saga)
+**Status:** Relaunch saga CLOSED 2026-04-18. Saga 2 (Lexer and
+line parsing) is the next current saga.
 **Scope:** Living roadmap. The current saga is detailed; later sagas
 are stubs to be fleshed out when they become current.
 
@@ -13,60 +14,105 @@ are stubs to be fleshed out when they become current.
   commits throughout a saga. At saga completion, the branch is
   renamed / opened as a PR targeting `dev`.
 
-## Current saga: 1. Relaunch
+## Current saga: 2. Lexer and line parsing
 
-**Goal:** replace the obsolete C-based scope with `.s`-based
-scaffolding + a single-mnemonic smoke test end-to-end.
+Not yet planned in detail. Authoritative step list will be written
+into `.agentrail/` when this saga starts.
 
-**Exit criteria:**
+**Anticipated goal:** move sw-as24 from its saga-1 "three-byte
+compare against the literal nop" to a real line-oriented parser.
+Outputs of this saga, in rough order of priority:
 
-- `docs/{prd,architecture,design,plan}.md` present and consistent.
+- Comment stripping (`;` to end of line) so header-commented `.s`
+  files can be fed without pre-processing. Restores the comment
+  line that was stripped from `tests/smoke/nop.s` in saga 1.
+- Line reader with a proper line-buffer size (pins **Q2** from
+  `architecture.md` for the input buffer; symbol-table size still
+  deferred).
+- Simple tokeniser: whitespace-separated mnemonic + operands,
+  comma-separated operands.
+- Expand recognised mnemonic set from 1 to a small handful
+  (`nop`, and enough printable-zero-operand peers like `halt` /
+  register-only `push r0` / `pop r0` that the saga is non-trivial).
+- Extend `src/sw-as24.s` with a proper `byte_to_hex_pair` helper
+  (currently hard-coded to emit "FF" or "00"); grows as soon as
+  more than two output byte values exist.
+- First shared bit-fiddling primitive that `sw-hexload` (future,
+  see `docs/utility.md`) can also consume: nibble_to_ascii and
+  ascii_to_nibble.
+- Pick up **Q3** (pass-1 caching strategy) from
+  `architecture.md` when the tokeniser begins to retain state.
+
+**Anticipated non-goals:** symbol tables, forward references, the
+full `r0..ir` register parser, addressing-mode parsing, two-pass
+scanning, directives. Those land in sagas 3-6.
+
+## Completed sagas
+
+### 1. Relaunch (closed 2026-04-18)
+
+**Goal met:** replaced the obsolete C-based scope with a `.s`-based
+scaffolding that passes a byte-identical single-mnemonic smoke test
+end-to-end, on a cold vendor + build from `just vendor-fetch` +
+`just build` + `just test`.
+
+**Exit criteria (as shipped):**
+
+- `docs/{prd,architecture,design,plan,utility}.md` present and
+  consistent. (`utility.md` added mid-saga to document the future
+  device-side hex decoder.)
 - Directory layout from `design.md` instantiated.
-- `just vendor-fetch` succeeds against a locally-built sibling
-  `sw-cor24-emulator`.
-- `just test` passes: `sw-as24` (built from `src/sw-as24.s`) emits
-  `0x00` for `tests/smoke/nop.s`, byte-identical to `cor24-run`'s
-  output for the same input.
-- README, CLAUDE.md, and `.gitignore` match the new scope.
+- `just vendor-fetch` resolves a vendored `cor24-run` via the
+  sibling `cor24-rs` repo (or `$SW_EM24_BIN` override, or system
+  PATH); manifest pins commit `40033d90e80dcef1a420bd3db7c8fd22fb9f181f`.
+  (The step prompt originally named `sw-cor24-emulator` as the
+  sibling; discovered mid-saga that `cor24-rs` is the stabilized
+  upstream and `sw-cor24-emulator` is an as-yet-undiverged fork.)
+- `just test` passes byte-identical: `cor24-run --assemble nop.s`
+  produces `0xFF`; `sw-as24` emits hex-ASCII `"SFF"` on UART TX;
+  after banner-strip + `scripts/hex2bin.sh`, candidate = `0xFF`.
+  (The step prompt assumed `nop` encodes to `0x00`; empirically
+  it's `0xFF`, corrected mid-saga.)
+- README, CLAUDE.md, and `.gitignore` rewritten for the new scope.
 
-**Planned steps** (provisional; authoritative list lives in
-`.agentrail/` once the saga is initialised):
+**Design decisions that landed:**
 
-| # | Slug                      | Summary                                                                 |
-|---|---------------------------|-------------------------------------------------------------------------|
-| 1 | docs-foundation           | Land `docs/{prd,architecture,design,plan}.md` (this commit family).     |
-| 2 | layout-skeleton           | Create empty `src/`, `tests/smoke/`, `scripts/`, `vendor/` with README-level placeholders and project `.gitignore`. |
-| 3 | vendor-manifest           | Write `vendor/active.env`, `vendor/.gitignore`, `vendor/sw-em24/<v>/version.json`, `vendor/sw-em24/<v>/bin/.gitkeep`. |
-| 4 | vendor-fetch-script       | Port `scripts/vendor-fetch.sh` from `sw-cor24-ocaml`; pare it down to the single `sw-em24` tool and exercise `--check`. |
-| 5 | justfile                  | Write `justfile` with `vendor-fetch`, `vendor-check`, `build`, `test`, `run`, `clean`. |
-| 6 | build-script              | Write `scripts/build.sh` that invokes vendored `cor24-run` on `src/sw-as24.s` and drops artifacts under `build/`. |
-| 7 | smoke-input               | Write `tests/smoke/nop.s` and `scripts/test.sh` (runs both assemblers on the input and diffs the byte output). |
-| 8 | sw-as24-skeleton          | Write `src/sw-as24.s` with UART I/O, banner, and the single-mnemonic recogniser for `nop` -> `0x00`. |
-| 9 | readme-revamp             | Rewrite `README.md` for the new scope; link to `docs/`.                 |
-|10 | claude-md-revamp          | Rewrite `CLAUDE.md` to match the `.s` scope; preserve AgentRail protocol. |
-|11 | saga-close                | Verify the whole saga end-to-end, update `docs/plan.md` to reflect completion, `agentrail complete --done`, archive saga. |
+- Vendoring pattern mirrors `sw-cor24-ocaml`. `vendor/active.env`
+  as single source of truth for versions. `vendor-fetch.sh`
+  resolves binaries via three strategies (env override, sibling
+  source build, system PATH).
+- sw-as24 emits hex-ASCII on UART TX rather than raw bytes,
+  because `cor24-run` filters `0x00` from every observation path.
+  `scripts/hex2bin.sh` is the host-side decoder; `sw-hexload`
+  (future) is the device-side decoder.
+- Saga-1 sw-as24 is deliberately minimal: no labels, no comments
+  in input, no operands, no directives, no symbol table, no
+  two-pass. Every one of those is a later saga.
 
-Steps 1-4 are pure infrastructure. Steps 5-7 wire the build and test
-harness. Step 8 is the only `.s` code, intentionally trivial. Steps
-9-11 finalise.
+**Steps (as run):**
 
-**Explicit non-goals for this saga** (quoted from `design.md`):
-labels, comments, multiple mnemonics, operands, directives, symbol
-table, two passes.
+| # | Slug                      | Outcome |
+|---|---------------------------|---------|
+| 1 | docs-foundation           | `docs/{prd,architecture,design,plan}.md` (587 lines). |
+| 2 | layout-skeleton           | `src/ tests/smoke/ scripts/` + `.gitignore`. |
+| 3 | vendor-manifest           | `vendor/active.env`, `vendor/sw-em24/v0.1.0/version.json`. |
+| 4 | vendor-fetch-script       | `scripts/vendor-fetch.sh` ported from ocaml; later extended with `$SW_EM24_BIN` override and system-PATH fallback. |
+| 5 | justfile                  | Six recipes + `default` list. |
+| 6 | build-script              | `scripts/build.sh` with assembly-error propagation. |
+| 7 | smoke-input               | `tests/smoke/nop.s` + `scripts/test.sh` (multiple rewrites). |
+| 8 | sw-as24-skeleton          | `src/sw-as24.s` (106 bytes assembled). Adopted hex-ASCII output mid-step. |
+| 9 | readme-revamp             | `README.md` rewrite + ASCII cleanup sweep across all `docs/*.md`. |
+|10 | claude-md-revamp          | `CLAUDE.md` rewrite; AgentRail protocol preserved byte-identical. |
+|11 | saga-close                | This. |
+
+**Non-goals delivered-as-expected** (from saga 1's `design.md`):
+labels, comments in input, multiple mnemonics, operands, directives,
+symbol table, two passes. All deferred to sagas 2-9.
 
 ## Upcoming sagas (stubs)
 
 The ordering below is a current best guess. A stub may be split,
 merged, or reordered when it becomes current.
-
-### 2. Lexer and line parsing
-
-Introduce real line parsing: comment stripping, label recognition,
-mnemonic + operand tokenisation, numeric literal parsing
-(decimal, hex, signed). Expands the recognised mnemonic set from 1
-to a small handful (`nop`, `mov`, `push`, `pop`, plus whatever the
-smoke tests need). Picks up **Q2** (static size limits) and
-**Q3** (pass-1 caching) from `architecture.md`.
 
 ### 3. Register + addressing mode parser
 
@@ -143,3 +189,9 @@ release artifact once one exists.
 ## Change log
 
 - 2026-04-18: Initial draft landed as part of the Relaunch saga.
+- 2026-04-18: Relaunch saga (saga 1) closed. `just test` green
+  end-to-end from cold vendor state. sw-as24 recognises `nop` and
+  emits hex-ASCII "SFF" on UART, decoded to the byte-identical
+  `0xFF` machine code that `cor24-run --assemble` produces. Saga 2
+  (Lexer and line parsing) promoted to current. Feature branch
+  `feat/relaunch-project` is ready for rename/PR targeting `dev`.
