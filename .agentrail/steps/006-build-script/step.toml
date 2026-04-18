@@ -1,6 +1,6 @@
 number = 6
 slug = "build-script"
-status = "pending"
+status = "in-progress"
 description = """
 Write scripts/build.sh -- the bash wrapper that invokes the vendored
 cor24-ru..."""
