@@ -1,0 +1,1 @@
+Created src/.gitkeep, tests/smoke/.gitkeep, scripts/.gitkeep to track the empty directories. Wrote root .gitignore that ignores build/ only. vendor/ intentionally deferred to step 3 so the vendor manifest files land together with vendor/.gitignore in one atomic commit. Committed as 7283c22.

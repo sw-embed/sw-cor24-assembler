@@ -1,6 +1,6 @@
 number = 2
 slug = "layout-skeleton"
-status = "in-progress"
+status = "completed"
 description = """
 Instantiate the directory skeleton described in docs/design.md.
 
@@ -8,4 +8,5 @@ Create (empt..."""
 role = "production"
 context_files = []
 created_at = "2026-04-18T15:22:26"
-commits = []
+completed_at = "2026-04-18T15:25:42"
+commits = ["7283c224aadceb7cca22b880c96bd11bb0c88eb4"]
