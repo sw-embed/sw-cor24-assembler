@@ -1,6 +1,6 @@
 number = 2
 slug = "layout-skeleton"
-status = "pending"
+status = "in-progress"
 description = """
 Instantiate the directory skeleton described in docs/design.md.
 
