@@ -1,10 +1,11 @@
 number = 10
 slug = "claude-md-revamp"
-status = "pending"
+status = "completed"
 description = """
 Rewrite CLAUDE.md to match the new .s-based scope without losing the
 AgentRai..."""
 role = "production"
 context_files = []
 created_at = "2026-04-18T15:23:35"
-commits = []
+completed_at = "2026-04-18T16:46:15"
+commits = ["d6837cb858b00ae8e1864f22266edf5effb92451"]
