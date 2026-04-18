@@ -1,7 +1,3 @@
-number = 11
-slug = "directives"
-status = "pending"
-description = """
 Implement assembler directives.
 
 1. .org ADDRESS — set current address (with optional fill).
@@ -11,8 +7,4 @@ Implement assembler directives.
 5. Ignore: .text, .data, .globl, .align (pass through silently).
 6. Test each directive against cross-assembler output.
 
-Reference: Rust assembler's directive handling."""
-role = "production"
-context_files = []
-created_at = "2026-04-18T12:44:00"
-commits = []
+Reference: Rust assembler's directive handling.

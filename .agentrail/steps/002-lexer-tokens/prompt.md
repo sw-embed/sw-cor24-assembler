@@ -1,7 +1,3 @@
-number = 2
-slug = "lexer-tokens"
-status = "pending"
-description = """
 Implement line-by-line lexer and token extraction.
 
 1. Read input line from UART (or memory buffer) into line_buf.
@@ -14,8 +10,4 @@ Implement line-by-line lexer and token extraction.
 8. Parse negative numbers (signed).
 9. Test with simple inputs: labels, instructions, comments, blank lines.
 
-Reference: Rust assembler's line parsing in assembler.rs"""
-role = "production"
-context_files = []
-created_at = "2026-04-18T12:44:00"
-commits = []
+Reference: Rust assembler's line parsing in assembler.rs

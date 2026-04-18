@@ -1,7 +1,3 @@
-number = 3
-slug = "mnemonic-table"
-status = "pending"
-description = """
 Build the mnemonic lookup table mapping instruction names to encoding info.
 
 1. Define parallel arrays: mnem_names[], mnem_types[], mnem_opcodes[].
@@ -11,8 +7,4 @@ Build the mnemonic lookup table mapping instruction names to encoding info.
 4. Implement mnemonic lookup: given a string, return index or -1.
 5. Test: verify all mnemonics are found, unknown strings return -1.
 
-Reference: Rust assembler's instruction dispatch and cor24-emulator ISA defs."""
-role = "production"
-context_files = []
-created_at = "2026-04-18T12:44:00"
-commits = []
+Reference: Rust assembler's instruction dispatch and cor24-emulator ISA defs.

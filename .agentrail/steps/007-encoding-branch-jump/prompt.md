@@ -1,7 +1,3 @@
-number = 7
-slug = "encoding-branch-jump"
-status = "pending"
-description = """
 Implement branch and jump instruction encoding.
 
 1. Encode bra (2 bytes, signed 8-bit PC-relative offset).
@@ -15,8 +11,4 @@ Implement branch and jump instruction encoding.
    Forward branches will use the forward-ref mechanism in step 010.
 9. Test against cross-assembler output.
 
-Reference: Rust assembler's branch/jump encoding."""
-role = "production"
-context_files = []
-created_at = "2026-04-18T12:44:00"
-commits = []
+Reference: Rust assembler's branch/jump encoding.

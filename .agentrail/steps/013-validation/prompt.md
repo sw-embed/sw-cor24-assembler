@@ -1,7 +1,3 @@
-number = 13
-slug = "validation"
-status = "pending"
-description = """
 Byte-for-byte validation against cross-assembler.
 
 1. Collect all .s test files from sw-cor24-x-assembler and language repos.
@@ -11,8 +7,4 @@ Byte-for-byte validation against cross-assembler.
 5. Test with: emulator examples, Forth kernel (forth.s), p-code VM (pvm.s),
    MacroLisp output, TinyC output, Pascal runtime output.
 6. Create a regression test script that automates this comparison.
-7. Document any intentional differences (if any)."""
-role = "production"
-context_files = []
-created_at = "2026-04-18T12:44:00"
-commits = []
+7. Document any intentional differences (if any).

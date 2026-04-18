@@ -1,7 +1,3 @@
-number = 1
-slug = "architecture"
-status = "pending"
-description = """
 Design the cas24 architecture and set up build/test infrastructure.
 
 1. Create src/cas24.c with main(), UART I/O helpers, and memory layout constants.
@@ -13,8 +9,4 @@ Design the cas24 architecture and set up build/test infrastructure.
 5. Implement hand-rolled string helpers: str_eq, str_len, str_copy.
 6. Verify the skeleton compiles and runs (prints a banner via UART).
 
-Reference: ~/github/sw-embed/sw-cor24-x-assembler/src/assembler.rs"""
-role = "production"
-context_files = []
-created_at = "2026-04-18T12:44:00"
-commits = []
+Reference: ~/github/sw-embed/sw-cor24-x-assembler/src/assembler.rs

@@ -1,7 +1,3 @@
-number = 5
-slug = "encoding-core"
-status = "pending"
-description = """
 Implement core instruction encoding infrastructure.
 
 1. Create emit_byte(), emit_word() functions that write to code buffer
@@ -11,8 +7,4 @@ Implement core instruction encoding infrastructure.
 4. Implement mov encoding (2 bytes, two register fields).
 5. Verify encoded bytes match cross-assembler output for these instructions.
 
-Reference: cor24-emulator decode ROM and Rust assembler encode functions."""
-role = "production"
-context_files = []
-created_at = "2026-04-18T12:44:00"
-commits = []
+Reference: cor24-emulator decode ROM and Rust assembler encode functions.

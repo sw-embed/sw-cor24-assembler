@@ -1,7 +1,3 @@
-number = 4
-slug = "register-parser"
-status = "pending"
-description = """
 Implement register name parsing.
 
 1. Parse register names: r0, r1, r2, fp, sp, z, iv, ir.
@@ -11,8 +7,4 @@ Implement register name parsing.
 4. Return error indicator for invalid register names.
 5. Test with all valid register names and common invalid inputs.
 
-Reference: Rust assembler's register parsing."""
-role = "production"
-context_files = []
-created_at = "2026-04-18T12:44:00"
-commits = []
+Reference: Rust assembler's register parsing.

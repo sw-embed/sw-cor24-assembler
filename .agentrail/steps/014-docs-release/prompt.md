@@ -1,7 +1,3 @@
-number = 14
-slug = "docs-release"
-status = "pending"
-description = """
 Finalize documentation and publish.
 
 1. Update README.md with build instructions, usage, and architecture.
@@ -10,8 +6,4 @@ Finalize documentation and publish.
 4. Add CHANGES.md with initial release notes.
 5. Ensure scripts/build.sh and scripts/test.sh work end-to-end.
 6. Push to GitHub.
-7. Update sw-cor24-project/docs/status.md to mark native assembler complete."""
-role = "production"
-context_files = []
-created_at = "2026-04-18T12:44:00"
-commits = []
+7. Update sw-cor24-project/docs/status.md to mark native assembler complete.

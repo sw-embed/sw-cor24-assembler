@@ -1,7 +1,3 @@
-number = 6
-slug = "encoding-alu"
-status = "pending"
-description = """
 Implement ALU instruction encoding.
 
 1. Encode add, sub, mul (2 bytes, reg-reg).
@@ -11,8 +7,4 @@ Implement ALU instruction encoding.
 5. Encode sxt, zxt (2 bytes, reg-reg).
 6. Test each instruction against cross-assembler output.
 
-Reference: Rust assembler's ALU encoding functions."""
-role = "production"
-context_files = []
-created_at = "2026-04-18T12:44:00"
-commits = []
+Reference: Rust assembler's ALU encoding functions.

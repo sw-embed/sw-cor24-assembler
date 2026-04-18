@@ -1,7 +1,3 @@
-number = 8
-slug = "encoding-load-store"
-status = "pending"
-description = """
 Implement load/store instruction encoding.
 
 1. Encode lb, lbu (2 bytes, offset(base) addressing).
@@ -12,8 +8,4 @@ Implement load/store instruction encoding.
 6. Handle signed 8-bit offset encoding.
 7. Test against cross-assembler output.
 
-Reference: Rust assembler's load/store encoding."""
-role = "production"
-context_files = []
-created_at = "2026-04-18T12:44:00"
-commits = []
+Reference: Rust assembler's load/store encoding.

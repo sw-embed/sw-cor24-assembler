@@ -1,7 +1,3 @@
-number = 12
-slug = "error-reporting"
-status = "pending"
-description = """
 Implement error collection and reporting.
 
 1. Collect errors during assembly (don't abort on first error).
@@ -10,8 +6,4 @@ Implement error collection and reporting.
    unresolved symbol, branch out of range, duplicate label.
 4. Output errors via UART after assembly completes.
 5. Return non-zero exit status on error.
-6. Test with intentionally malformed inputs."""
-role = "production"
-context_files = []
-created_at = "2026-04-18T12:44:00"
-commits = []
+6. Test with intentionally malformed inputs.

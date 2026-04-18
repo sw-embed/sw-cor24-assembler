@@ -1,7 +1,3 @@
-number = 10
-slug = "forward-refs"
-status = "pending"
-description = """
 Implement forward reference resolution.
 
 1. During second pass, when a label is not yet resolved, record a
@@ -15,8 +11,4 @@ Implement forward reference resolution.
 6. Test with programs that have forward branches and forward la references.
 7. Verify byte-identical output with cross-assembler.
 
-Reference: Rust assembler's ForwardRef struct and resolution logic."""
-role = "production"
-context_files = []
-created_at = "2026-04-18T12:44:00"
-commits = []
+Reference: Rust assembler's ForwardRef struct and resolution logic.

@@ -1,7 +1,3 @@
-number = 9
-slug = "two-pass-symbols"
-status = "pending"
-description = """
 Implement two-pass assembly with symbol table.
 
 1. Implement first pass: scan all lines, collect label addresses into
@@ -13,8 +9,4 @@ Implement two-pass assembly with symbol table.
 5. Test with programs containing both backward and forward label references.
 6. Verify output matches cross-assembler.
 
-Reference: Rust assembler's two-pass logic and symbol table."""
-role = "production"
-context_files = []
-created_at = "2026-04-18T12:44:00"
-commits = []
+Reference: Rust assembler's two-pass logic and symbol table.
