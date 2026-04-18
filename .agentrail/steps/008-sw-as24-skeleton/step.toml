@@ -1,6 +1,6 @@
 number = 8
 slug = "sw-as24-skeleton"
-status = "pending"
+status = "in-progress"
 description = """
 Write src/sw-as24.s -- the minimum viable self-hosted assembler that
 recognis..."""
