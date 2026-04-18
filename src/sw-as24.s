@@ -1,7 +1,21 @@
 ; src/sw-as24.s -- minimum viable self-hosted COR24 assembler.
 ;
-; Recognises exactly one mnemonic: "nop". Emits byte 0x00 on a match,
-; byte 0xFF on anything else, then halts via branch-loop.
+; Recognises exactly one mnemonic: "nop". Emits the ASCII hex
+; representation of one byte on UART TX, then halts via branch-loop.
+;   match    -> "FF" (ASCII 'F','F') -- nop encodes as 0xFF
+;   mismatch -> "00" (ASCII '0','0') -- error sentinel (0x00 is
+;               not a valid COR24 instruction encoding today, so
+;               it doubles as a safe distinguisher from any real
+;               output byte sw-as24 will learn to emit in later
+;               sagas)
+;
+; Output is hex-encoded rather than raw binary because cor24-run
+; filters 0x00 out of its UART TX observation paths (per-byte log,
+; summary, raw --terminal stdout). Emitting printable hex chars
+; sidesteps the filter and makes the byte stream observable through
+; any cor24-run capture mode. scripts/hex2bin.sh is the host-side
+; decoder that turns the hex stream back into a raw binary for
+; byte-identical comparison.
 ;
 ; Scope (Relaunch saga): prove the toolchain round-trip end-to-end.
 ; Later sagas introduce labels, operands, multiple mnemonics, two-pass
@@ -54,17 +68,29 @@ _start:
     ceq     r0, r1
     brf     fail
 
-    ; Match. Emit 0x00 and halt. Trailing bytes in the UART RX
-    ; buffer (newline, EOT, etc.) are left unread -- cor24-run's
-    ; -n instruction cap in scripts/test.sh bounds the emulation,
-    ; so draining is unnecessary for a single-mnemonic smoke test.
-    lc      r0, 0               ; emit 0x00 = nop encoding
+    ; Match. Emit "FF" (ASCII 'F' 'F' = 70, 70). That is the hex
+    ; representation of byte 0xFF, which is the COR24 encoding of
+    ; `nop` (verified by cor24-run --assemble). Trailing bytes in
+    ; the UART RX buffer are left unread -- cor24-run's -n cap in
+    ; scripts/test.sh bounds the emulation, so draining is
+    ; unnecessary for a single-mnemonic smoke test.
+    lc      r0, 70              ; 'F'
+    la      r2, putc
+    jal     r1, (r2)
+    lc      r0, 70              ; 'F'
     la      r2, putc
     jal     r1, (r2)
     bra     halt
 
 fail:
-    lcu     r0, 255             ; emit 0xFF = error sentinel (lc is signed 0..127)
+    ; Mismatch. Emit "00" (ASCII '0' '0' = 48, 48) = hex for 0x00,
+    ; which is not a valid COR24 instruction encoding today and so
+    ; reliably distinguishes a fail-path run from any real assembly
+    ; output sw-as24 will produce in later sagas.
+    lc      r0, 48              ; '0'
+    la      r2, putc
+    jal     r1, (r2)
+    lc      r0, 48              ; '0'
     la      r2, putc
     jal     r1, (r2)
     ; fall through to halt
