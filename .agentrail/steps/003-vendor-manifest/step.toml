@@ -1,6 +1,6 @@
 number = 3
 slug = "vendor-manifest"
-status = "pending"
+status = "in-progress"
 description = """
 Create the vendor manifest layout for the sw-em24 (cor24-run) tool.
 
