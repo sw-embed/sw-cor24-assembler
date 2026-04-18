@@ -57,5 +57,15 @@ mkdir -p "$BUILD_DIR"
 echo "assembling $SRC"
 echo "  -> $BIN"
 echo "  -> $LST"
-"$COR24_RUN" --assemble "$SRC" "$BIN" "$LST"
+# cor24-run --assemble prints `Assembly error: ...` to stdout and
+# exits 0 even on errors. Capture stdout, surface it, and fail if
+# any error line is present.
+ASM_OUTPUT="$("$COR24_RUN" --assemble "$SRC" "$BIN" "$LST" 2>&1)"
+if [ -n "$ASM_OUTPUT" ]; then
+    echo "$ASM_OUTPUT"
+fi
+if echo "$ASM_OUTPUT" | grep -q -i '^\(assembly \)\?error\|^error:'; then
+    echo "build: FAILED (assembly errors above)" >&2
+    exit 1
+fi
 echo "build: done"

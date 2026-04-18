@@ -64,7 +64,7 @@ _start:
     bra     halt
 
 fail:
-    lc      r0, 255             ; emit 0xFF = error sentinel
+    lcu     r0, 255             ; emit 0xFF = error sentinel (lc is signed 0..127)
     la      r2, putc
     jal     r1, (r2)
     ; fall through to halt
