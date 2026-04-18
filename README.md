@@ -1,45 +1,100 @@
 # sw-cor24-assembler
 
-Native COR24 assembler written in C — runs directly on COR24 FPGA hardware.
-
-## Overview
-
-A two-pass assembler that processes COR24 `.s` assembly source and
-produces machine code. Written in C, compiled by the cross C compiler
-(`sw-cor24-x-tinyc` / `tc24r`), and runs natively on COR24 hardware.
-
-This is a key component of the self-hosted development environment:
-with a native assembler on COR24, all assembly-based toolchains
-(Forth, p-code VM, etc.) can be built on-device without a host PC.
-
-## Naming Convention
-
-| Repo | Role | Written in | Runs on |
-|------|------|-----------|---------|
-| `sw-cor24-x-assembler` | Cross-assembler | Rust | Host (x86/ARM) |
-| `sw-cor24-assembler` | Native assembler | C | COR24 FPGA |
-
-The `x-` prefix denotes cross-tools that run on a host machine.
-The plain name is the native tool that runs on COR24 hardware.
-
-## Bootstrapping
-
-```
-sw-cor24-x-tinyc (Rust)  compiles  cas24.c  →  cas24.s
-sw-cor24-x-assembler (Rust)  assembles  cas24.s  →  cas24.bin
-cas24.bin runs on COR24 FPGA  →  native assembler available on-device
-```
+A self-hosting COR24 assembler written in COR24 assembly.
 
 ## Status
 
-In development. See `.agentrail/saga.toml` for implementation progress.
+**Relaunch saga in progress.** The project was re-scoped away from a
+C implementation to a `.s`-only implementation that will eventually
+assemble its own source on COR24 hardware. Current milestone:
+single-mnemonic smoke test -- `sw-as24` reads `nop` on UART, emits
+the byte-identical encoding that the Rust cross-assembler would
+produce.
 
-## Related Repos
+See [`docs/plan.md`](docs/plan.md) for the saga breakdown.
 
-- [sw-cor24-x-assembler](https://github.com/sw-embed/sw-cor24-x-assembler) — Rust cross-assembler (reference implementation)
-- [sw-cor24-x-tinyc](https://github.com/sw-embed/sw-cor24-x-tinyc) — Rust cross C compiler (used to compile this)
-- [sw-cor24-emulator](https://github.com/sw-embed/sw-cor24-emulator) — COR24 emulator + ISA definitions
+## Quickstart
 
-## License
+```bash
+just vendor-fetch    # materialize vendor/sw-em24/<v>/bin/cor24-run
+                     # from the sibling cor24-rs repo (or SW_EM24_BIN
+                     # override, or system PATH -- see vendor/active.env)
+just build           # assemble src/sw-as24.s -> build/sw-as24.bin
+just test            # smoke test: cor24-run's and sw-as24's output
+                     # on tests/smoke/nop.s are byte-identical
+just --list          # discover every recipe
+```
 
-See [LICENSE](LICENSE).
+Requirements on the host: `bash`, `just`, `jq`, `xxd` (ships in
+`vim-common` on most distros). For `just vendor-fetch` to build
+from source, also `cargo` + `rustc` and a clone of
+[cor24-rs](https://github.com/sw-embed/cor24-rs) at
+`../cor24-rs`. See the fallback options documented in
+[`vendor/active.env`](vendor/active.env).
+
+## Repository layout
+
+```
+sw-cor24-assembler/
+|-- README.md                # this file
+|-- justfile                 # build / test / vendor recipes
+|-- docs/
+|   |-- prd.md               # product requirements (long-lived)
+|   |-- architecture.md      # system architecture (long-lived)
+|   |-- design.md            # current-saga design decisions
+|   |-- plan.md              # saga roadmap
+|   `-- utility.md           # forward-looking sw-hexload sketch
+|-- src/
+|   `-- sw-as24.s            # the self-hosted assembler (grows each saga)
+|-- tests/
+|   `-- smoke/nop.s          # byte-identical smoke test input
+|-- scripts/
+|   |-- vendor-fetch.sh      # fetch vendored tools from manifests
+|   |-- build.sh             # assemble sw-as24.s via vendored cor24-run
+|   |-- test.sh              # run the smoke test pipeline
+|   `-- hex2bin.sh           # host-side decoder for sw-as24's hex output
+|-- vendor/
+|   |-- active.env           # single-source-of-truth version pins
+|   `-- sw-em24/<v>/         # vendored cor24-run (binary is gitignored)
+|-- .agentrail/              # saga tracking (see docs/plan.md)
+`-- .agentrail-archive/      # prior C-era saga, preserved for reference
+```
+
+## Documentation
+
+- [PRD](docs/prd.md) -- goals, non-goals, success criteria, stakeholders.
+- [Architecture](docs/architecture.md) -- pipeline, data model, open
+  questions (hosting model, static size limits, self-host verification).
+- [Design](docs/design.md) -- current-saga directory layout, vendor
+  strategy, justfile recipe set, smoke-test spec, hex-encoded UART
+  output rationale.
+- [Plan](docs/plan.md) -- saga roadmap and change log.
+- [Utility](docs/utility.md) -- forward-looking design for
+  `sw-hexload`, the device-side companion to sw-as24's hex output.
+
+## Cross-repo context
+
+- [cor24-rs](https://github.com/sw-embed/cor24-rs) -- the stabilized
+  upstream that ships `cor24-run` (combined Rust cross-assembler +
+  emulator) and the reference assembler library this project ports
+  from. Vendored by pinned commit in
+  [`vendor/sw-em24/v0.1.0/version.json`](vendor/sw-em24/v0.1.0/version.json).
+- [sw-cor24-emulator](https://github.com/sw-embed/sw-cor24-emulator)
+  -- sw-embed fork of `cor24-rs` reserved for future divergent changes.
+  No tracked divergence yet; we vendor from `cor24-rs` directly.
+- [sw-cor24-x-assembler](https://github.com/sw-embed/sw-cor24-x-assembler)
+  -- Rust cross-assembler library (rlib) used as the behavioural
+  reference. Included transitively via `cor24-run`.
+- [sw-cor24-project](https://github.com/sw-embed/sw-cor24-project) --
+  the ecosystem umbrella listing every COR24 repo.
+
+## What is a "COR24 assembler"?
+
+COR24 is a 24-bit RISC ISA (MakerLisp-inspired). `cor24-run` is the
+Rust host tool that assembles `.s` files into machine code and/or
+runs them on the emulator. This project's goal is to produce an
+assembler that can run on *COR24 itself* -- byte-identical output
+to `cor24-run --assemble`, with no host dependencies once the
+toolchain is self-hosted.
+
+Full statement of goals and success criteria: [`docs/prd.md`](docs/prd.md).
