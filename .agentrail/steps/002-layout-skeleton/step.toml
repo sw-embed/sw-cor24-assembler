@@ -1,0 +1,11 @@
+number = 2
+slug = "layout-skeleton"
+status = "pending"
+description = """
+Instantiate the directory skeleton described in docs/design.md.
+
+Create (empt..."""
+role = "production"
+context_files = []
+created_at = "2026-04-18T15:22:26"
+commits = []

@@ -1,0 +1,10 @@
+number = 6
+slug = "build-script"
+status = "pending"
+description = """
+Write scripts/build.sh -- the bash wrapper that invokes the vendored
+cor24-ru..."""
+role = "production"
+context_files = []
+created_at = "2026-04-18T15:23:03"
+commits = []

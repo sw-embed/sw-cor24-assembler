@@ -1,0 +1,10 @@
+number = 4
+slug = "vendor-fetch-script"
+status = "pending"
+description = """
+Port scripts/vendor-fetch.sh from sw-cor24-ocaml, tailored to this
+project's ..."""
+role = "production"
+context_files = []
+created_at = "2026-04-18T15:22:26"
+commits = []

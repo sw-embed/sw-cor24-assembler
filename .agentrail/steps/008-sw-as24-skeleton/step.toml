@@ -1,0 +1,10 @@
+number = 8
+slug = "sw-as24-skeleton"
+status = "pending"
+description = """
+Write src/sw-as24.s -- the minimum viable self-hosted assembler that
+recognis..."""
+role = "production"
+context_files = []
+created_at = "2026-04-18T15:23:03"
+commits = []

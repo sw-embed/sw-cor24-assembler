@@ -1,0 +1,10 @@
+number = 10
+slug = "claude-md-revamp"
+status = "pending"
+description = """
+Rewrite CLAUDE.md to match the new .s-based scope without losing the
+AgentRai..."""
+role = "production"
+context_files = []
+created_at = "2026-04-18T15:23:35"
+commits = []

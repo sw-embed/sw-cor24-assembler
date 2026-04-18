@@ -1,0 +1,10 @@
+number = 7
+slug = "smoke-input"
+status = "pending"
+description = """
+Create the smoke-test input and harness that close docs/design.md's
+exit crit..."""
+role = "production"
+context_files = []
+created_at = "2026-04-18T15:23:03"
+commits = []
