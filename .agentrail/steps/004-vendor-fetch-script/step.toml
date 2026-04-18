@@ -1,6 +1,6 @@
 number = 4
 slug = "vendor-fetch-script"
-status = "pending"
+status = "in-progress"
 description = """
 Port scripts/vendor-fetch.sh from sw-cor24-ocaml, tailored to this
 project's ..."""
