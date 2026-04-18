@@ -1,10 +1,11 @@
 number = 8
 slug = "sw-as24-skeleton"
-status = "in-progress"
+status = "completed"
 description = """
 Write src/sw-as24.s -- the minimum viable self-hosted assembler that
 recognis..."""
 role = "production"
 context_files = []
 created_at = "2026-04-18T15:23:03"
-commits = []
+completed_at = "2026-04-18T16:33:10"
+commits = ["7f920765333d7cb7f4442abad27588c69279b7ae"]
