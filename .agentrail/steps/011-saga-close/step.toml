@@ -1,6 +1,6 @@
 number = 11
 slug = "saga-close"
-status = "pending"
+status = "completed"
 description = """
 Close the Relaunch saga.
 
@@ -9,4 +9,5 @@ Validation:
 role = "validation"
 context_files = []
 created_at = "2026-04-18T15:23:35"
-commits = []
+completed_at = "2026-04-18T16:49:44"
+commits = ["2ce79ae8fe5e617f3750b0b9eeb7f2bdd18354ea"]
