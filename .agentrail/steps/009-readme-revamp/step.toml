@@ -1,0 +1,12 @@
+number = 9
+slug = "readme-revamp"
+status = "completed"
+description = """
+Rewrite README.md to match the new scope.
+
+Remove every reference to the prio..."""
+role = "production"
+context_files = []
+created_at = "2026-04-18T15:23:35"
+completed_at = "2026-04-18T16:42:57"
+commits = ["17ad14a4ca0cc8ba3c77bc7a7f434288010b9826"]

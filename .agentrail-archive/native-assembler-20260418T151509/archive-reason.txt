@@ -1,0 +1,1 @@
+Scope pivot: project re-scoped from C-based native assembler (tc24r-compiled) to self-hosting assembler written in COR24 .s assembly, built via vendored Rust cross-assembler. Original saga steps target the superseded C plan. Relaunch is tracked in a fresh saga starting with docs/PRD/architecture and the new scaffolding.

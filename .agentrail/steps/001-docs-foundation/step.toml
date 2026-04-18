@@ -1,0 +1,12 @@
+number = 1
+slug = "docs-foundation"
+status = "completed"
+description = """
+Establish the documentation baseline for the sw-as24 relaunch.
+
+Write docs/pr..."""
+role = "production"
+context_files = []
+created_at = "2026-04-18T15:22:26"
+completed_at = "2026-04-18T15:23:57"
+commits = ["8d2ce32d822f6f37b73b93a7b2f6a6531be34d63"]

@@ -1,0 +1,9 @@
+Finalize documentation and publish.
+
+1. Update README.md with build instructions, usage, and architecture.
+2. Document the C subset used and tc24r constraints.
+3. Document the static allocation limits (max symbols, max code size, etc.).
+4. Add CHANGES.md with initial release notes.
+5. Ensure scripts/build.sh and scripts/test.sh work end-to-end.
+6. Push to GitHub.
+7. Update sw-cor24-project/docs/status.md to mark native assembler complete.

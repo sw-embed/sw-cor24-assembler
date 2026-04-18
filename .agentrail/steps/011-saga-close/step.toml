@@ -1,0 +1,13 @@
+number = 11
+slug = "saga-close"
+status = "completed"
+description = """
+Close the Relaunch saga.
+
+Validation:
+1. From a clean vendor state (`rm -rf v..."""
+role = "validation"
+context_files = []
+created_at = "2026-04-18T15:23:35"
+completed_at = "2026-04-18T16:49:44"
+commits = ["2ce79ae8fe5e617f3750b0b9eeb7f2bdd18354ea"]
