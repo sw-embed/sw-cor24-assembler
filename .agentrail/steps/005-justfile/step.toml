@@ -1,6 +1,6 @@
 number = 5
 slug = "justfile"
-status = "pending"
+status = "in-progress"
 description = """
 Write the justfile with the relaunch recipe set.
 
