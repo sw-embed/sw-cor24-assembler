@@ -1,10 +1,11 @@
 number = 4
 slug = "vendor-fetch-script"
-status = "in-progress"
+status = "completed"
 description = """
 Port scripts/vendor-fetch.sh from sw-cor24-ocaml, tailored to this
 project's ..."""
 role = "production"
 context_files = []
 created_at = "2026-04-18T15:22:26"
-commits = []
+completed_at = "2026-04-18T15:30:50"
+commits = ["df42b42354403dfdaa0f95eadc617ea963902412"]
