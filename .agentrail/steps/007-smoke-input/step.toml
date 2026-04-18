@@ -1,6 +1,6 @@
 number = 7
 slug = "smoke-input"
-status = "pending"
+status = "in-progress"
 description = """
 Create the smoke-test input and harness that close docs/design.md's
 exit crit..."""
