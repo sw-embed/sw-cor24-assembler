@@ -101,34 +101,75 @@ Design decisions:
 Input — `tests/smoke/nop.s`:
 
 ```
-; single nop, one byte
 nop
 ```
 
+One line, no comments. Saga-1 sw-as24 deliberately does not parse
+comments (step 008 non-goal); header comments return in saga 2
+once comment-stripping lands.
+
 Expected behaviour:
 
-1. `cor24-run --assemble tests/smoke/nop.s` (or equivalent
-   invocation; exact flag pinned during the saga) emits a single
-   byte `0x00`.
-2. `sw-as24`, built from `src/sw-as24.s` by the same `cor24-run`,
-   then run against `tests/smoke/nop.s` as input, emits the same
-   single byte `0x00`.
-3. `scripts/test.sh` diffs the two outputs and exits 0 iff they
+1. `cor24-run --assemble tests/smoke/nop.s build/ref.bin build/ref.lst`
+   emits a single byte `0xFF` (the COR24 encoding of `nop` —
+   verified empirically against the Rust assembler's listing
+   output).
+2. `cor24-run --load-binary build/sw-as24.bin@0 --entry 0 -u "nop\x04" ...`
+   loads the already-assembled sw-as24 binary, feeds the .s content
+   over UART RX (terminated with 0x04 EOT), runs until self-branch
+   halt. sw-as24's UART TX carries the startup banner `S` followed
+   by the hex representation of the emitted byte: `"SFF"` on match,
+   `"S00"` on fail.
+3. `scripts/test.sh` parses cor24-run's `UART output:` summary
+   line, strips the one-char banner, pipes the remaining hex text
+   through `scripts/hex2bin.sh`, and `diff -q`s the decoded
+   `build/candidate.bin` against `build/ref.bin`. Exit 0 iff they
    match.
+
+### Why hex-encoded UART output
+
+sw-as24 emits its machine-code output as ASCII hex (two printable
+chars per byte) rather than raw binary. Reason: cor24-run silently
+filters byte `0x00` out of every UART-TX observation path — the
+per-byte log, the summary line, and even raw stdout under
+`--terminal`. Verified by probing with `lc r0, 0` vs `lc r0, 1`:
+the `0x01` byte survives to stdout, the `0x00` byte does not.
+Since `nop` encodes to `0xFF` and future instructions will hit
+`0x00` too, emitting raw bytes forfeits observability.
+
+Hex encoding sidesteps the filter (all hex digits are printable
+0x30–0x46) and carries extra benefits: transport-robust over any
+terminal, human-debuggable, matches the classical Intel-HEX /
+S-record pattern for shipping binary over text channels. The
+design holds even if cor24-run's filter is fixed upstream later.
+
+`scripts/hex2bin.sh` (a one-line wrapper around `xxd -r -p`) is the
+host-side decoder. It pairs with sw-as24's output anywhere: the
+smoke test, an FPGA flasher, a serial-console capture.
 
 ## `src/sw-as24.s` for this saga
 
 Minimum viable assembler: recognises literally one mnemonic, `nop`,
-and emits one byte. Expectations:
+and emits hex for one byte. Expectations:
 
-- UART input loop that reads a line into an input buffer.
-- String compare against the literal `nop`.
-- On match, emit `0x00` to UART output.
-- On mismatch or end-of-input with no match, emit an error code and
-  exit non-zero.
+- UART banner `S` on startup (one printable char; test.sh strips).
+- Three-byte UART read into r0, each byte compared against 'n',
+  'o', 'p' in sequence via `ceq` + `brf fail`.
+- On match, emit two UART bytes `F`, `F` (hex for `0xFF` = nop
+  encoding). On mismatch, emit `0`, `0` (hex for `0x00` sentinel).
+- Halt via branch-to-self (`halt: bra halt`). cor24-run detects
+  self-branch and terminates the emulation.
 
-Deliberately omitted (later sagas): labels, comments, multiple
-mnemonics, operands, directives, a symbol table, two passes.
+Calling convention for `putc` and `getc` helpers follows the
+`jal r1, (r2)` pattern from `cor24-rs/rust-to-cor24/src/examples/`
+(see `uart_hello.s`): `jal` stashes the return address in `r1`;
+the callee pushes `r1` on entry, pops before `jmp (r1)` on exit,
+leaving r1 free as scratch inside the subroutine.
+
+Deliberately omitted (later sagas): labels in input, comments in
+input, multiple mnemonics, operands, directives, a symbol table,
+two passes, proper byte-to-hex helper (currently hard-coded for
+the two byte values this saga emits).
 
 ## README revamp
 
