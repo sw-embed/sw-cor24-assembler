@@ -98,3 +98,13 @@ to `cor24-run --assemble`, with no host dependencies once the
 toolchain is self-hosted.
 
 Full statement of goals and success criteria: [`docs/prd.md`](docs/prd.md).
+
+## Links
+
+- Blog: [Software Wrighter Lab](https://software-wrighter-lab.github.io/)
+- Discord: [Join the community](https://discord.com/invite/Ctzk5uHggZ)
+- YouTube: [Software Wrighter](https://www.youtube.com/@SoftwareWrighter)
+
+## License
+
+Copyright (c) 2026 Michael A Wright. MIT-licensed; see [LICENSE](LICENSE).
