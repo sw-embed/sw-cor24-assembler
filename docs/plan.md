@@ -7,12 +7,17 @@ are stubs to be fleshed out when they become current.
 
 ## Conventions
 
-- One saga = one reviewable unit of work ending in a PR.
+- One saga = one reviewable unit of work ending in a rename from
+  `feat/<slug>` to `pr/<slug>`.
 - Sagas are tracked in `.agentrail/`; archived sagas land in
   `.agentrail-archive/`.
 - The feature branch (`feat/relaunch-project` for saga 1) accumulates
-  commits throughout a saga. At saga completion, the branch is
-  renamed / opened as a PR targeting `dev`.
+  commits throughout a saga. At saga completion, the dev agent runs
+  `git branch -m feat/<slug> pr/<slug>` -- that rename IS the
+  handoff. A separate release engineer agent picks up the `pr/`
+  branch, merges it into `dev`, and pushes to GitHub. Dev agents
+  have no write access to the remote and do not invoke `git push`,
+  `gh pr create`, or any other GitHub-side command.
 
 ## Current saga: 2. Lexer and line parsing
 
@@ -194,4 +199,5 @@ release artifact once one exists.
   emits hex-ASCII "SFF" on UART, decoded to the byte-identical
   `0xFF` machine code that `cor24-run --assemble` produces. Saga 2
   (Lexer and line parsing) promoted to current. Feature branch
-  `feat/relaunch-project` is ready for rename/PR targeting `dev`.
+  `feat/relaunch-project` renamed to `pr/relaunch` for the release
+  engineer to merge into `dev`.
