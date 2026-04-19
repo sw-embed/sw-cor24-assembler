@@ -1,0 +1,8 @@
+number = 1
+slug = "specs-foundation"
+status = "in-progress"
+description = "Write repo-local, authoritative specifications covering ISA, as24 language, o..."
+role = "production"
+context_files = []
+created_at = "2026-04-18T20:12:56"
+commits = []
