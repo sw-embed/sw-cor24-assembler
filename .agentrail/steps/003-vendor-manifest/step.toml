@@ -1,0 +1,12 @@
+number = 3
+slug = "vendor-manifest"
+status = "completed"
+description = """
+Create the vendor manifest layout for the sw-em24 (cor24-run) tool.
+
+Mirror s..."""
+role = "production"
+context_files = []
+created_at = "2026-04-18T15:22:26"
+completed_at = "2026-04-18T15:28:23"
+commits = ["a422ad2ea7ac8a47f92ea0a7bbecf350fd489f70"]
