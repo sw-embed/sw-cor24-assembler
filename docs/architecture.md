@@ -26,13 +26,34 @@ met, `sw-as24` can assemble itself.
 
 ## 2. Reference implementation
 
-The canonical behaviour is defined by `sw-cor24-x-assembler`
-(`cor24-assembler` Rust crate, `rlib`). Its public entry point is
-`Assembler::assemble(&str)`. This project ports that behaviour to `.s`.
+The ultimate byte-level reference is **makerlisp's `as24.c`**,
+reachable via the oracle service described in
+[`oracle-protocol.md`](oracle-protocol.md). The Rust
+`sw-cor24-x-assembler` (`cor24-assembler` rlib) is a
+byte-compatible clean-room clone, currently the bootstrap
+cross-assembler, and is expected to agree with `as24.c` on every
+input; its public entry point is `Assembler::assemble(&str)`.
 
-Encoding tables (opcodes, register numbers, ISA types) originate in
-`sw-cor24-emulator`'s decode ROM; see `../sw-cor24-emulator` for the
-authoritative definitions.
+This repo owns its own specification copies so sw-as24 does not
+depend on any sibling repo being checked out:
+
+- [`isa.md`](isa.md) — COR24 ISA (registers, memory, opcodes,
+  decode ROM, calling convention).
+- [`as24-language.md`](as24-language.md) — source language
+  accepted by every COR24 assembler.
+- [`output-formats.md`](output-formats.md) — `.lgo`, `.lst`,
+  `.obj`, and the raw `.bin` convention used by `cor24-run`.
+- [`fpga-runtime.md`](fpga-runtime.md) — target runtime
+  environment (memory map, UART, reset, interrupts).
+- [`self-host-toolchain.md`](self-host-toolchain.md) — the
+  editor/linker/loader/monitor contract sw-as24 expects on the
+  target (mostly open questions).
+- [`oracle-protocol.md`](oracle-protocol.md) — REST oracle,
+  test corpus, byte-identity regression procedure.
+
+The hardware decode ROM (`dis_rom.v` in the COR24-TB FPGA
+project) is the ultimate source for the byte-to-(opcode,ra,rb)
+mapping; `isa.md` §6 records the currently-known table.
 
 ## 3. Pipeline
 

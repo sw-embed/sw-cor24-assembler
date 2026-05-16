@@ -166,6 +166,28 @@ questions: [`docs/architecture.md`](docs/architecture.md). Current
 saga's design decisions: [`docs/design.md`](docs/design.md). Saga
 roadmap: [`docs/plan.md`](docs/plan.md).
 
+Repo-local specifications (authoritative — sw-as24 implements
+these; do not defer to sibling repos):
+
+- [`docs/isa.md`](docs/isa.md) -- COR24 ISA reference (registers,
+  memory map, opcodes, decode ROM, calling convention).
+- [`docs/as24-language.md`](docs/as24-language.md) -- the `.s`
+  source language accepted by every COR24 assembler.
+- [`docs/output-formats.md`](docs/output-formats.md) -- `.lgo`,
+  `.lst`, `.obj`, and raw `.bin`.
+- [`docs/fpga-runtime.md`](docs/fpga-runtime.md) -- target
+  runtime, multi-binary loading model, UART, interrupts.
+- [`docs/self-host-toolchain.md`](docs/self-host-toolchain.md)
+  -- editor / linker / loader / monitor contract (open).
+- [`docs/oracle-protocol.md`](docs/oracle-protocol.md) -- REST
+  oracle + test corpus for byte-identity regression.
+
+Reserved register-name convention (important): the only valid
+register names in COR24 assembly are `r0`, `r1`, `r2`, `fp`,
+`sp`, `z`, `iv`, `ir`, and `c`. Never write `r3`..`r7` -- the
+decode ROM uses 3-bit selector values 0..7 internally, but
+selectors are never exposed as names in source or docs.
+
 No C, Rust, Python, or `make` in this repository. Implementation is
 `.s` plus `bash` + `justfile` + one-line shell helpers.
 
