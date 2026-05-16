@@ -1,6 +1,6 @@
-name = "specs-foundation"
-status = "active"
+name = "assemblers-checkpoint"
+status = "completed"
 current_step = 1
-created_at = "2026-04-18T20:12:25"
+created_at = "2026-05-16T14:05:32"
 plan_file = ".agentrail/plan.md"
 retroactive = false

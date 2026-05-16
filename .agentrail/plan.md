@@ -1,7 +1,7 @@
-Specs foundation saga — land repo-local, authoritative specifications so sw-as24 implements against this repo, not sibling repos.
+Assemblers checkpoint saga — capture the cross-repo bootstrap plan in a single doc.
 
-Scope: ISA reference, as24 language spec, output formats, FPGA runtime environment, self-host toolchain contract, REST oracle protocol. Each doc is authoritative for sw-as24's behaviour and carries its own provenance footer.
+Goal: docs/assemblers-checkpoint.md, a status-and-vision checkpoint that names the three assembler projects (dcasm = flat as24, dchla = HLASM-inspired macro-assembler, dcxas = Rust cross-assembler), maps the bootstrap chain (dcxas → dcasm self-host; dcasm → dchla self-host), names the demo ladder we can build toward, and flags what blocks each rung.
 
-Saga exit: all six specifications committed to docs/, referenced from CLAUDE.md and docs/architecture.md as the in-repo canonical sources. docs/plan.md renumbered so Lexer becomes saga 3.
+Single-step saga: one doc + a brief CLAUDE.md / plan.md pointer update.
 
-See also: docs/plan.md (living roadmap), docs/architecture.md.
+Exit: docs/assemblers-checkpoint.md committed; referenced from CLAUDE.md and docs/plan.md as the cross-repo orientation doc.
