@@ -272,3 +272,8 @@ artifact once one exists (assuming x-assembler has landed a
   the ISA / language / format / runtime specs serve multiple
   downstream sagas and warrant their own close rather than being
   bundled into lexer work.
+- 2026-05-16: Assemblers-checkpoint doc landed
+  (`docs/assemblers-checkpoint.md`). Captures the three-project
+  cross-repo bootstrap model (dcxas, dcasm, dchla), the demo
+  ladder (Rungs 1–3), and current blockers. Does not change the
+  saga roadmap.

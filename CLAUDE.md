@@ -166,6 +166,11 @@ questions: [`docs/architecture.md`](docs/architecture.md). Current
 saga's design decisions: [`docs/design.md`](docs/design.md). Saga
 roadmap: [`docs/plan.md`](docs/plan.md).
 
+Cross-repo orientation: [`docs/assemblers-checkpoint.md`](docs/assemblers-checkpoint.md)
+names the three assembler projects (dcxas/dcasm/dchla), maps
+the bootstrap chain, and lays out the demo ladder. Read this
+first when joining the effort cold.
+
 Repo-local specifications (authoritative — sw-as24 implements
 these; do not defer to sibling repos):
 

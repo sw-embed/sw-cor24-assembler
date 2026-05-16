@@ -1,0 +1,9 @@
+number = 1
+slug = "assemblers-checkpoint"
+status = "completed"
+description = "Write docs/assemblers-checkpoint.md capturing the three-assembler model, boot..."
+role = "production"
+context_files = []
+created_at = "2026-05-16T14:05:46"
+completed_at = "2026-05-16T14:10:52"
+commits = ["2fc91ff300285fd3eee84e64a9ef5f448eb7e820"]
